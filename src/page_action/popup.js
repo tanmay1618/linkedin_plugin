@@ -1,18 +1,3 @@
-// chrome.storage.sync.get("forSyncCode", function(url) {
-//   document.getElementById("forSyncCode").innerText = `
-//   git remote add upstream ${url}
-//   git fetch upstream
-//   git branch --set-upstream-to=upstream/master master`;
-// });
-
-// chrome.storage.sync.get("forSyncCode", function(url) {
-//   console.log(`url`, url);
-//   document.getElementById("forSyncCode").innerText = url;
-// });
-
-// const forkSyncContainer = document.getElementById("forkSync");
-// const localPRContainer = document.getElementById("localPR");
-
 const forkSync = document.getElementById("forSyncCode");
 const localPR = document.getElementById("localPRCode");
 
@@ -46,52 +31,40 @@ chrome.tabs.query(
     const { id: tabId } = tabs[0].url;
 
     setupForkSync(tabId);
-    setupLocalPR(tabId);
   }
 );
 
-function setupForkSync(tabId) {
-  // @TODO: use "octolytics-dimension-repository_is_fork" to check if repo is a fork later
-  const code = `(function getUrls(){
-      const forkUrl = document.querySelector('.exp') 
-        ? document.querySelector('.exp').textContent
-        : undefined;
-
-
+function setupForkSync(tabId) {  
+    const code = `(function getUrls(){
+      const forkUrl = document.all[0].outerHTML;
       return { forkUrl};
     })()`;
+
+  
 
   // http://infoheap.com/chrome-extension-tutorial-access-dom/
   chrome.tabs.executeScript(tabId, { code }, function(result) {
     const { forkUrl} = result[0];
+    const forkData = 'testing'
+    
+    chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+      console.log(message)
+      return true
+  });
 
-      forkSync.innerText = `Test2 : ${forkUrl}`;
-      chrome.runtime.sendMessage({ message: 'save_text',forkUrl });
+    // // @ToDo: Get this from user's preference
+      
+    chrome.runtime.sendMessage({ greeting: forkUrl}, function(response) {
+      console.log(response);
+    });
     // forkSync.innerText = JSON.stringify(result);
   });
+
+  chrome.storage.sync.get("data_ext", function({ branchName }) {
+    forkSync.innerText = `Test2 : ${branchName}`;
+  })
+  
 }
 
 
 
-function setupLocalPR(tabId) {
-  // <meta property="og:url" content="https://github.com/dance2die/calendar-dates/pull/62">
-  const code = `(function getPRId() {
-    const url = document.querySelector('a[class="userName name"]')
-      ? document.querySelector('a[class="userName name"]').textContent
-      : undefined;
-    return {url}; 
-  })()`;
-
-  chrome.tabs.executeScript(tabId, { code }, function(result) {
-    const {prId} = result[0];
-
-    //const isPR = !isNaN(parseInt(prId));
-
-    chrome.storage.sync.get("branchName", function({ branchName }) {
-      // // @ToDo: Get this from user's preference
-
-
-        localPR.innerText = `Test${prId}`;
-    });
-  });
-}
