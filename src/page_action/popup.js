@@ -39,31 +39,17 @@ function setupForkSync(tabId) {
       const forkUrl = document.all[0].outerHTML;
       return { forkUrl};
     })()`;
-
-  
-
-  // http://infoheap.com/chrome-extension-tutorial-access-dom/
-  chrome.tabs.executeScript(tabId, { code }, function(result) {
+    // http://infoheap.com/chrome-extension-tutorial-access-dom/
+    chrome.tabs.executeScript(tabId, { code }, function(result) {
     const { forkUrl} = result[0];
     const forkData = 'testing'
-    
-    chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-      console.log(message)
-      return true
-  });
-
-    // // @ToDo: Get this from user's preference
-      
-    chrome.runtime.sendMessage({ greeting: forkUrl}, function(response) {
-      console.log(response);
+    var port = chrome.runtime.connect({name: "knockknock"});
+    port.postMessage({ greeting: forkUrl});
+    port.onMessage.addListener(function(msg) {
+      forkSync.innerText = JSON.stringify(msg);
     });
-    // forkSync.innerText = JSON.stringify(result);
-  });
 
-  chrome.storage.sync.get("data_ext", function({ branchName }) {
-    forkSync.innerText = `Test2 : ${branchName}`;
-  })
-  
+    });
 }
 
 
