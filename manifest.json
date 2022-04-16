@@ -1,9 +1,9 @@
 {
-  "name": "Easy GitHub",
+  "name": "Easy Linkedin",
   "version": "0.0.1",
   "manifest_version": 2,
-  "description": "Working with GitHub easy",
-  "homepage_url": "https://sungkim.co",
+  "description": "Working with Linkedin easy",
+  "homepage_url": "https://www.linkedin.com/mynetwork/invite-connect/connections/",
   "icons": {
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
@@ -17,7 +17,7 @@
   "options_page": "src/options/options.html",
   "page_action": {
     "default_icon": "icons/icon19.png",
-    "default_title": "Easy GitHub Title",
+    "default_title": "Easy Linkedin Title",
     "default_popup": "src/page_action/page_action.html"
   },
   "permissions": [

@@ -15,15 +15,6 @@ const copyToClipboard = code =>
     .then(() => alert("Copied to clipboard~"))
     .catch(() => alert("Failed to copy to clipboard..."));
 
-document.getElementById("copyForkSyncButton").addEventListener("click", _ => {
-  const code = extractCopyText(forkSync.innerText);
-  copyToClipboard(code);
-});
-
-document.getElementById("copyLocalPRButton").addEventListener("click", _ => {
-  const code = extractCopyText(localPR.innerText);
-  copyToClipboard(code);
-});
 
 chrome.tabs.query(
   { active: true, windowId: chrome.windows.WINDOW_ID_CURRENT },
@@ -46,7 +37,13 @@ function setupForkSync(tabId) {
     var port = chrome.runtime.connect({name: "knockknock"});
     port.postMessage({ greeting: forkUrl});
     port.onMessage.addListener(function(msg) {
-      forkSync.innerText = JSON.stringify(msg);
+      var i = 0;
+      var html =  "<ul>"
+      for(i= 0; i < msg["result"].length; i++){
+          html = html + "<li>" + msg["result"][i][0] + " - " + msg["result"][i]["company_info"] +"</li>"
+      }
+      html = html + "</ul>"
+      forkSync.innerHTML = html;
     });
 
     });

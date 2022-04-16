@@ -6,7 +6,7 @@ chrome.runtime.onInstalled.addListener(function() {
       {
         conditions: [
           new chrome.declarativeContent.PageStateMatcher({
-            pageUrl: { hostEquals: "resdex.naukri.com" }
+            pageUrl: { hostEquals: "www.linkedin.com" }
           })
         ],
         actions: [new chrome.declarativeContent.ShowPageAction()]
@@ -36,7 +36,7 @@ chrome.runtime.onConnect.addListener(function(port) {
         $.ajax({
           type: "POST",
           data: data,
-          url: 'https://app.pragti.in/api/employer/parse_data/', // That's a relative URL!
+          url: 'https://app.pragti.in/api/employer/parse_linkedin_data/', // That's a relative URL!
           success: function(data) {
               var res = jQuery.parseJSON(data);
               console.log("result",res)
